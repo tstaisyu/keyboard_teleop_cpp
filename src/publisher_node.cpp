@@ -10,14 +10,14 @@ public:
         raw();
         keypad(stdscr, TRUE);
         noecho();
-        this->keyLoop();
+        listenForKeyPress();
     }
 
     ~KeyboardPublisher() {
         endwin();
     }
 
-    void keyLoop() {
+    void listenForKeyPress() {
         int ch;
         while (rclcpp::ok()) {
             ch = getch();
@@ -42,6 +42,8 @@ public:
                     publishCommand(0); // stop
                     RCLCPP_INFO(this->get_logger(), "Stopping");
                     return;
+                default:
+                    break;
             }
         }
     }
@@ -59,7 +61,8 @@ private:
 
 int main(int argc, char * argv[]) {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<KeyboardPublisher>());
+    auto node = std::make_shared<KeyboardPublisher>();
+    rclcpp::spin(node);
     rclcpp::shutdown();
     return 0;
 }

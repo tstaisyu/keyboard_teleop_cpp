@@ -25,8 +25,9 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-add_executable(publishe_node src/publisher_node.cpp)
+add_executable(publisher_node src/publisher_node.cpp)
 ament_target_dependencies(publisher_node rclcpp std_msgs)
+target_link_libraries(publisher_node ncurses) 
 
 install(TARGETS
   publisher_node
